@@ -1,0 +1,4 @@
+export const N8N_MODULE_OPTIONS = "N8N_MODULE_OPTIONS"
+export const N8N_CLIENT = "N8N_CLIENT"
+
+export const DEFAULT_TIMEOUT = 30000
