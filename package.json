@@ -1,5 +1,5 @@
 {
-  "name": "@your-org/nestjs-n8n",
+  "name": "@chimfwembemlf/nestjs-n8n",
   "version": "1.0.0",
   "description": "A fluent NestJS client for n8n automation workflows",
   "main": "dist/index.js",
@@ -20,12 +20,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/nestjs-n8n.git"
+    "url": "https://github.com/ChimfwembeMLF/nestjs-n8n.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/nestjs-n8n/issues"
+    "url": "https://github.com/ChimfwembeMLF/nestjs-n8n/issues"
   },
-  "homepage": "https://github.com/your-org/nestjs-n8n#readme",
+  "homepage": "https://github.com/ChimfwembeMLF/nestjs-n8n#readme",
   "peerDependencies": {
     "@nestjs/common": "^10.0.0 || ^11.0.0",
     "@nestjs/core": "^10.0.0 || ^11.0.0",
