@@ -15,12 +15,12 @@ A fluent NestJS client for [n8n](https://n8n.io) automation workflows. This pack
 ## Installation
 
 \`\`\`bash
-npm install @chimfwembemlf/nestjs-n8n
+npm install ChimfwembeMLF/nestjs-n8n
 # or
-yarn add @chimfwembemlf/nestjs-n8n
+yarn add ChimfwembeMLF/nestjs-n8n
 # or
-pnpm add @chimfwembemlf/nestjs-n8n
-\`\`\`
+pnpm add ChimfwembeMLF/nestjs-n8n
+\`\`\`nestjs-n8n
 
 ## Quick Start
 
@@ -28,7 +28,7 @@ pnpm add @chimfwembemlf/nestjs-n8n
 
 \`\`\`typescript
 import { Module } from '@nestjs/common';
-import { N8nModule } from '@chimfwembemlf/nestjs-n8n';
+import { N8nModule } from 'nestjs-n8n';
 
 @Module({
   imports: [
@@ -46,7 +46,7 @@ export class AppModule {}
 \`\`\`typescript
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { N8nModule } from '@chimfwembemlf/nestjs-n8n';
+import { N8nModule } from 'nestjs-n8n';
 
 @Module({
   imports: [
@@ -69,7 +69,7 @@ export class AppModule {}
 
 \`\`\`typescript
 import { Injectable } from '@nestjs/common';
-import { N8nClientService } from '@chimfwembemlf/nestjs-n8n';
+import { N8nClientService } from 'nestjs-n8n';
 
 @Injectable()
 export class WorkflowService {
@@ -203,7 +203,7 @@ const workflows = await n8nClient.tags().workflows('tag-id');
 
 \`\`\`typescript
 import { Controller, Post, Body } from '@nestjs/common';
-import { N8nWebhook, WebhookService } from '@chimfwembemlf/nestjs-n8n';
+import { N8nWebhook, WebhookService } from 'nestjs-n8n';
 
 @Controller('webhooks')
 export class WebhookController {
@@ -222,7 +222,7 @@ export class WebhookController {
 
 \`\`\`typescript
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
-import { N8nWebhook, WebhookValidationGuard } from '@chimfwembemlf/nestjs-n8n';
+import { N8nWebhook, WebhookValidationGuard } from 'nestjs-n8n';
 
 @Controller('webhooks')
 export class WebhookController {
@@ -263,7 +263,7 @@ SwaggerModule.setup('api', app, document);
 
 3. Use the provided DTOs in your controllers:
 \`\`\`typescript
-import { CreateWorkflowDto, UpdateWorkflowDto } from '@chimfwembemlf/nestjs-n8n';
+import { CreateWorkflowDto, UpdateWorkflowDto } from 'nestjs-n8n';
 
 @Post()
 async createWorkflow(@Body() dto: CreateWorkflowDto) {
@@ -293,7 +293,7 @@ N8N_TIMEOUT=30000
 
 \`\`\`typescript
 import { Test } from '@nestjs/testing';
-import { N8nModule, N8nClientService } from '@chimfwembemlf/nestjs-n8n';
+import { N8nModule, N8nClientService } from 'nestjs-n8n';
 
 describe('WorkflowService', () => {
   let service: WorkflowService;
@@ -331,4 +331,4 @@ MIT
 
 ## Support
 
-For issues and questions, please open an issue on [GitHub](https://github.com/your-org/nestjs-n8n/issues).
+For issues and questions, please open an issue on [GitHub](https://github.com/ChimfwembeMLF/nestjs-n8n/issues).

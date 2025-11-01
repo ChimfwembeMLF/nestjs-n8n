@@ -1,10 +1,13 @@
 {
-  "name": "@chimfwembemlf/nestjs-n8n",
+  "name": "@n8n/nestjs-client",
   "version": "1.0.0",
   "description": "A fluent NestJS client for n8n automation workflows",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
@@ -15,8 +18,15 @@
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "format": "prettier --write \"src/**/*.ts\""
   },
-  "keywords": ["nestjs", "n8n", "automation", "workflow", "webhook", "api-client"],
-  "author": "Your Name",
+  "keywords": [
+    "nestjs",
+    "n8n",
+    "automation",
+    "workflow",
+    "webhook",
+    "api-client"
+  ],
+  "author": "Chimfwembe Kangwa",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -63,13 +73,19 @@
     "typescript": "^5.7.2"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "ts"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-    "collectCoverageFrom": ["**/*.(t|j)s"],
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
