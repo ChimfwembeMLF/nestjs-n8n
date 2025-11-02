@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common"
-import type { HttpService } from "@nestjs/axios"
+import { Injectable, Inject } from "@nestjs/common"
+import { HttpService } from "@nestjs/axios"
 import { firstValueFrom } from "rxjs"
 import type { AxiosRequestConfig, AxiosResponse } from "axios"
 import type { N8nModuleOptions } from "../interfaces/n8n-module-options.interface"
-import { DEFAULT_TIMEOUT } from "../constants/n8n.constants"
+import { DEFAULT_TIMEOUT, N8N_MODULE_OPTIONS } from "../constants/n8n.constants"
 import { WorkflowService } from "./workflow.service"
 import { ExecutionService } from "./execution.service"
 import { CredentialService } from "./credential.service"
@@ -19,7 +19,10 @@ export class N8nClientService {
   private readonly options: N8nModuleOptions
   private readonly httpService: HttpService
 
-  constructor(options: N8nModuleOptions, httpService: HttpService) {
+  constructor(
+    @Inject(N8N_MODULE_OPTIONS) options: N8nModuleOptions,
+    httpService: HttpService
+  ) {
     this.options = options
     this.httpService = httpService
     this.baseUrl = options.baseUrl.replace(/\/$/, "")
