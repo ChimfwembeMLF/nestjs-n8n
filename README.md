@@ -35,6 +35,7 @@ import { N8nModule } from 'nestjs-n8n';
     N8nModule.forRoot({
       baseUrl: 'https://your-n8n-instance.com',
       apiKey: 'your-api-key',
+      enableSwaggerController: true, // Optional: adds Swagger-documented endpoints
     }),
   ],
 })
@@ -57,6 +58,7 @@ import { N8nModule } from 'nestjs-n8n';
         baseUrl: configService.get('N8N_BASE_URL'),
         apiKey: configService.get('N8N_API_KEY'),
         timeout: 30000,
+        enableSwaggerController: true, // Optional: adds Swagger endpoints
       }),
       inject: [ConfigService],
     }),
@@ -238,7 +240,11 @@ export class WebhookController {
 
 ## Swagger/OpenAPI Documentation
 
-This package includes full Swagger/OpenAPI support with pre-configured DTOs and decorators. See [SWAGGER_SETUP.md](./SWAGGER_SETUP.md) for detailed setup instructions.
+This package includes full Swagger/OpenAPI support with pre-configured DTOs and decorators. You can automatically add n8n API endpoints to your Swagger documentation.
+
+### Automatic Swagger Integration
+
+To automatically add n8n endpoints to your Swagger docs, enable the controller when configuring the module:
 
 ### Quick Swagger Setup
 

@@ -43,6 +43,9 @@ export * from "./decorators/n8n-webhook.decorator"
 // Guards
 export * from "./guards/webhook-validation.guard"
 
+// Controllers
+export * from "./controllers/n8n.controller"
+
 // Constants
 export * from "./constants/n8n.constants"
 

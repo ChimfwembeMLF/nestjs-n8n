@@ -22,6 +22,12 @@ export interface N8nModuleOptions {
    * Optional custom headers to include in all requests
    */
   headers?: Record<string, string>
+
+  /**
+   * Enable Swagger controller endpoints for API documentation
+   * @default false
+   */
+  enableSwaggerController?: boolean
 }
 
 export interface N8nOptionsFactory {

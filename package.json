@@ -40,14 +40,10 @@
     "@nestjs/axios": "^3.0.0 || ^4.0.0",
     "@nestjs/common": "^10.0.0 || ^11.0.0",
     "@nestjs/core": "^10.0.0 || ^11.0.0",
+    "@nestjs/swagger": "^7.0.0 || ^8.0.0",
     "axios": "^1.6.0",
     "reflect-metadata": "^0.1.13 || ^0.2.0",
     "rxjs": "^7.8.0"
-  },
-  "peerDependenciesMeta": {
-    "@nestjs/swagger": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@nestjs/axios": "^4.0.1",
