@@ -7,7 +7,7 @@ import { CreateCredentialDto } from '../dto/create-credential.dto'
 import { ExecuteWorkflowDto } from '../dto/execute-workflow.dto'
 
 @ApiTags('N8N Workflows')
-@Controller('n8n')
+@Controller('rest')
 export class N8nController {
   constructor(private readonly n8nClient: N8nClientService) {}
 
