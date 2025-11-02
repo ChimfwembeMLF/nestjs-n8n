@@ -1,5 +1,5 @@
 {
-  "name": "@n8n/nestjs-client",
+  "name": "@chimfwembe/nestjs-n8n",
   "version": "1.0.0",
   "description": "A fluent NestJS client for n8n automation workflows",
   "main": "dist/index.js",
@@ -37,9 +37,9 @@
   },
   "homepage": "https://github.com/ChimfwembeMLF/nestjs-n8n#readme",
   "peerDependencies": {
+    "@nestjs/axios": "^3.0.0 || ^4.0.0",
     "@nestjs/common": "^10.0.0 || ^11.0.0",
     "@nestjs/core": "^10.0.0 || ^11.0.0",
-    "@nestjs/axios": "^3.0.0 || ^4.0.0",
     "axios": "^1.6.0",
     "reflect-metadata": "^0.1.13 || ^0.2.0",
     "rxjs": "^7.8.0"
@@ -50,12 +50,12 @@
     }
   },
   "devDependencies": {
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/cli": "^10.4.0",
     "@nestjs/common": "^11.1.8",
     "@nestjs/core": "^11.1.8",
-    "@nestjs/axios": "^4.0.1",
-    "@nestjs/testing": "^11.1.8",
     "@nestjs/swagger": "^8.0.7",
+    "@nestjs/testing": "^11.1.8",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.5",
     "@typescript-eslint/eslint-plugin": "^8.19.1",
@@ -88,5 +88,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "dependencies": {
+    "class-validator": "^0.14.2"
   }
 }

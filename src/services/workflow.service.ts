@@ -1,10 +1,10 @@
 import type { N8nClientService } from "./n8n-client.service"
 import type {
   Workflow,
-  CreateWorkflowDto,
-  UpdateWorkflowDto,
   WorkflowListResponse,
 } from "../interfaces/workflow.interface"
+import type { CreateWorkflowDto } from "../dto/create-workflow.dto"
+import type { UpdateWorkflowDto } from "../dto/update-workflow.dto"
 
 export class WorkflowService {
   constructor(private readonly client: N8nClientService) {}
