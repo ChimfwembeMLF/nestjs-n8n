@@ -4,23 +4,36 @@ A fluent NestJS client for [n8n](https://n8n.io) automation workflows. This pack
 
 ## Features
 
-- 🚀 **Full n8n API Coverage** - Workflows, executions, credentials, tags, and more
+- 🚀 **Full n8n API Coverage** - Workflows, executions, credentials, tags, and webhooks
 - 🔒 **Type-Safe** - Complete TypeScript definitions for all API operations
 - 🎯 **Fluent API** - Intuitive, chainable methods for easy integration
 - 🪝 **Webhook Support** - Built-in decorators and guards for handling n8n webhooks
 - ⚡ **Async Configuration** - Support for dynamic configuration with ConfigService
 - 🧪 **Testable** - Designed with dependency injection for easy testing
-- 📚 **Swagger/OpenAPI Documentation** - Full Swagger/OpenAPI support with pre-configured DTOs and decorators
+- 📚 **Auto-Generated Swagger Docs** - REST endpoints with OpenAPI documentation
+- ✅ **Configuration Validation** - Built-in validation with helpful error messages
+- 🛡️ **Error Handling** - Comprehensive error types with actionable guidance
+- 🔌 **Connection Testing** - Optional connection validation during startup
 
 ## Installation
 
 \`\`\`bash
-npm install ChimfwembeMLF/nestjs-n8n
+npm install @chimfwembe/nestjs-n8n
 # or
-yarn add ChimfwembeMLF/nestjs-n8n
+yarn add @chimfwembe/nestjs-n8n
 # or
-pnpm add ChimfwembeMLF/nestjs-n8n
-\`\`\`nestjs-n8n
+pnpm add @chimfwembe/nestjs-n8n
+\`\`\`
+
+**That's it!** All required dependencies (`@nestjs/axios`, `@nestjs/swagger`, `axios`, `class-validator`) are automatically installed.
+
+### Peer Dependencies
+
+The following are peer dependencies that should already be in your NestJS project:
+- `@nestjs/common` - NestJS core package
+- `@nestjs/core` - NestJS core package  
+- `reflect-metadata` - TypeScript metadata
+- `rxjs` - Reactive extensions
 
 ## Quick Start
 
@@ -28,14 +41,15 @@ pnpm add ChimfwembeMLF/nestjs-n8n
 
 \`\`\`typescript
 import { Module } from '@nestjs/common';
-import { N8nModule } from 'nestjs-n8n';
+import { N8nModule } from '@chimfwembe/nestjs-n8n';
 
 @Module({
   imports: [
     N8nModule.forRoot({
       baseUrl: 'https://your-n8n-instance.com',
       apiKey: 'your-api-key',
-      enableSwaggerController: true, // Optional: adds Swagger-documented endpoints
+      enableSwaggerController: true, // Adds REST endpoints with Swagger docs
+      validateConnection: true,      // Test connection on startup
     }),
   ],
 })
@@ -47,7 +61,7 @@ export class AppModule {}
 \`\`\`typescript
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { N8nModule } from 'nestjs-n8n';
+import { N8nModule } from '@chimfwembe/nestjs-n8n';
 
 @Module({
   imports: [
@@ -58,7 +72,8 @@ import { N8nModule } from 'nestjs-n8n';
         baseUrl: configService.get('N8N_BASE_URL'),
         apiKey: configService.get('N8N_API_KEY'),
         timeout: 30000,
-        enableSwaggerController: true, // Optional: adds Swagger endpoints
+        enableSwaggerController: true,
+        validateConnection: process.env.NODE_ENV !== 'test', // Skip in tests
       }),
       inject: [ConfigService],
     }),
@@ -67,18 +82,35 @@ import { N8nModule } from 'nestjs-n8n';
 export class AppModule {}
 \`\`\`
 
-### 3. Use in Your Service
+### 3. REST API Endpoints (Optional)
+
+When you enable `enableSwaggerController: true`, the package automatically adds REST endpoints to your application:
+
+- `GET /rest/workflows` - List all workflows
+- `GET /rest/workflows/:id` - Get specific workflow
+- `POST /rest/workflows` - Create workflow
+- `PUT /rest/workflows/:id` - Update workflow
+- `DELETE /rest/workflows/:id` - Delete workflow
+- `POST /rest/workflows/:id/activate` - Activate workflow
+- `POST /rest/workflows/:id/execute` - Execute workflow
+- `GET /rest/executions` - List executions
+- `GET /rest/credentials` - List credentials
+
+These endpoints are automatically documented in Swagger/OpenAPI.
+
+### 4. Use in Your Service
 
 \`\`\`typescript
 import { Injectable } from '@nestjs/common';
-import { N8nClientService } from 'nestjs-n8n';
+import { N8nClientService } from '@chimfwembe/nestjs-n8n';
 
 @Injectable()
 export class WorkflowService {
   constructor(private readonly n8nClient: N8nClientService) {}
 
   async getAllWorkflows() {
-    return this.n8nClient.workflows().all();
+    return this.n8nClient.workflows().list();
+    // or use .all() for backward compatibility
   }
 
   async activateWorkflow(workflowId: string) {
@@ -97,10 +129,12 @@ export class WorkflowService {
 
 \`\`\`typescript
 // Get all workflows
-const workflows = await n8nClient.workflows().all();
+const workflows = await n8nClient.workflows().list();
+// or use .all() for backward compatibility
 
 // Get a specific workflow
-const workflow = await n8nClient.workflows().find('workflow-id');
+const workflow = await n8nClient.workflows().get('workflow-id');
+// or use .find() for backward compatibility
 
 // Create a workflow
 const newWorkflow = await n8nClient.workflows().create({
@@ -131,13 +165,13 @@ const result = await n8nClient.workflows().execute('workflow-id', {
 
 \`\`\`typescript
 // Get all executions
-const executions = await n8nClient.executions().all();
+const executions = await n8nClient.executions().list();
 
 // Get executions for a workflow
-const workflowExecutions = await n8nClient.executions().forWorkflow('workflow-id');
+const workflowExecutions = await n8nClient.executions().list({ workflowId: 'workflow-id' });
 
 // Get a specific execution
-const execution = await n8nClient.executions().find('execution-id');
+const execution = await n8nClient.executions().get('execution-id');
 
 // Delete an execution
 await n8nClient.executions().delete('execution-id');
@@ -150,10 +184,10 @@ const retried = await n8nClient.executions().retry('execution-id');
 
 \`\`\`typescript
 // Get all credentials
-const credentials = await n8nClient.credentials().all();
+const credentials = await n8nClient.credentials().list();
 
 // Get a specific credential
-const credential = await n8nClient.credentials().find('credential-id');
+const credential = await n8nClient.credentials().get('credential-id');
 
 // Create a credential
 const newCredential = await n8nClient.credentials().create({
@@ -181,10 +215,10 @@ const types = await n8nClient.credentials().types();
 
 \`\`\`typescript
 // Get all tags
-const tags = await n8nClient.tags().all();
+const tags = await n8nClient.tags().list();
 
 // Get a specific tag
-const tag = await n8nClient.tags().find('tag-id');
+const tag = await n8nClient.tags().get('tag-id');
 
 // Create a tag
 const newTag = await n8nClient.tags().create({ name: 'Production' });
@@ -205,7 +239,7 @@ const workflows = await n8nClient.tags().workflows('tag-id');
 
 \`\`\`typescript
 import { Controller, Post, Body } from '@nestjs/common';
-import { N8nWebhook, WebhookService } from 'nestjs-n8n';
+import { N8nWebhook, WebhookService } from '@chimfwembe/nestjs-n8n';
 
 @Controller('webhooks')
 export class WebhookController {
@@ -224,7 +258,7 @@ export class WebhookController {
 
 \`\`\`typescript
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
-import { N8nWebhook, WebhookValidationGuard } from 'nestjs-n8n';
+import { N8nWebhook, WebhookValidationGuard } from '@chimfwembe/nestjs-n8n';
 
 @Controller('webhooks')
 export class WebhookController {
@@ -269,7 +303,7 @@ SwaggerModule.setup('api', app, document);
 
 3. Use the provided DTOs in your controllers:
 \`\`\`typescript
-import { CreateWorkflowDto, UpdateWorkflowDto } from 'nestjs-n8n';
+import { CreateWorkflowDto, UpdateWorkflowDto } from '@chimfwembe/nestjs-n8n';
 
 @Post()
 async createWorkflow(@Body() dto: CreateWorkflowDto) {
@@ -286,6 +320,45 @@ For complete examples and best practices, see [SWAGGER_SETUP.md](./SWAGGER_SETUP
 | `baseUrl` | string | Yes | - | Your n8n instance URL |
 | `apiKey` | string | Yes | - | n8n API key |
 | `timeout` | number | No | 30000 | Request timeout in milliseconds |
+| `enableSwaggerController` | boolean | No | false | Add REST endpoints with Swagger docs |
+| `validateConnection` | boolean | No | false | Test connection during module initialization |
+| `headers` | object | No | {} | Custom headers for all requests |
+
+## Error Handling
+
+The package includes comprehensive error handling with specific error types:
+
+\`\`\`typescript
+import { 
+  N8nConfigurationError, 
+  N8nConnectionError, 
+  N8nAuthenticationError,
+  N8nValidationError 
+} from '@chimfwembe/nestjs-n8n';
+
+try {
+  await n8nClient.workflows().list();
+} catch (error) {
+  if (error instanceof N8nAuthenticationError) {
+    console.error('Check your API key:', error.message);
+  } else if (error instanceof N8nConnectionError) {
+    console.error('Connection failed:', error.message);
+  }
+}
+\`\`\`
+
+## Configuration Validation
+
+The package validates your configuration on startup and provides helpful error messages:
+
+\`\`\`typescript
+// This will throw N8nConfigurationError with helpful guidance
+N8nModule.forRoot({
+  baseUrl: 'invalid-url', // ❌ Will suggest correct format
+  apiKey: 'your-api-key', // ❌ Will detect placeholder values
+  validateConnection: true, // ✅ Tests connection on startup
+})
+\`\`\`
 
 ## Environment Variables
 
@@ -299,7 +372,7 @@ N8N_TIMEOUT=30000
 
 \`\`\`typescript
 import { Test } from '@nestjs/testing';
-import { N8nModule, N8nClientService } from 'nestjs-n8n';
+import { N8nModule, N8nClientService } from '@chimfwembe/nestjs-n8n';
 
 describe('WorkflowService', () => {
   let service: WorkflowService;
@@ -311,6 +384,7 @@ describe('WorkflowService', () => {
         N8nModule.forRoot({
           baseUrl: 'http://localhost:5678',
           apiKey: 'test-key',
+          validateConnection: false, // Skip connection test in tests
         }),
       ],
       providers: [WorkflowService],
@@ -326,6 +400,52 @@ describe('WorkflowService', () => {
   });
 });
 \`\`\`
+
+## Troubleshooting
+
+### Common Issues
+
+#### "Cannot resolve dependencies" Error
+This should no longer happen as dependencies are auto-installed. If you still see this error, make sure you have the basic NestJS dependencies:
+\`\`\`bash
+npm install @nestjs/common @nestjs/core reflect-metadata rxjs
+\`\`\`
+
+#### Configuration Errors
+- **Invalid baseUrl**: Use full URL with protocol (https://your-n8n.com)
+- **Invalid API key**: Generate in N8N Settings > API Keys
+- **Connection timeout**: Increase timeout or check N8N instance availability
+
+#### Environment Variables Not Loading
+\`\`\`typescript
+// Make sure ConfigModule is loaded first
+@Module({
+  imports: [
+    ConfigModule.forRoot(), // ← This must come before N8nModule
+    N8nModule.forRootAsync({...}),
+  ],
+})
+\`\`\`
+
+### Debug Mode
+
+Enable debug logging in development:
+\`\`\`typescript
+N8nModule.forRoot({
+  baseUrl: process.env.N8N_BASE_URL,
+  apiKey: process.env.N8N_API_KEY,
+  validateConnection: process.env.NODE_ENV === 'development',
+})
+\`\`\`
+
+## Migration Guide
+
+### From v1.0.0 to v1.0.3+
+
+- Replace `.all()` with `.list()`
+- Replace `.find()` with `.get()`
+- Add peer dependencies if missing
+- Update imports to use `@chimfwembe/nestjs-n8n`
 
 ## Contributing
 

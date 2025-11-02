@@ -22,10 +22,26 @@ export class WorkflowService {
   }
 
   /**
+   * Get all workflows (alias for list() for backward compatibility)
+   * @deprecated Use list() instead
+   */
+  async all(limit?: number, cursor?: string): Promise<WorkflowListResponse> {
+    return this.list(limit, cursor)
+  }
+
+  /**
    * Get a specific workflow by ID
    */
   async get(id: string): Promise<Workflow> {
     return this.client.get<Workflow>(`/api/v1/workflows/${id}`)
+  }
+
+  /**
+   * Find a specific workflow by ID (alias for get() for backward compatibility)
+   * @deprecated Use get() instead
+   */
+  async find(id: string): Promise<Workflow> {
+    return this.get(id)
   }
 
   /**

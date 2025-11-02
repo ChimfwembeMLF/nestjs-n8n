@@ -1,6 +1,8 @@
+import { Injectable } from "@nestjs/common"
 import type { N8nClientService } from "./n8n-client.service"
 import type { WebhookPayload, WebhookValidationResult } from "../interfaces/webhook.interface"
 
+@Injectable()
 export class WebhookService {
   constructor(private readonly client: N8nClientService) {}
 

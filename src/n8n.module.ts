@@ -6,7 +6,14 @@ import type {
   N8nOptionsFactory,
 } from "./interfaces/n8n-module-options.interface"
 import { N8N_MODULE_OPTIONS } from "./constants/n8n.constants"
+import { validateN8nConfiguration } from "./utils/config-validator"
 import { N8nClientService } from "./services/n8n-client.service"
+import { WorkflowService } from "./services/workflow.service"
+import { ExecutionService } from "./services/execution.service"
+import { CredentialService } from "./services/credential.service"
+import { TagService } from "./services/tag.service"
+import { WebhookService } from "./services/webhook.service"
+import { WebhookValidationGuard } from "./guards/webhook-validation.guard"
 import { N8nController } from "./controllers/n8n.controller"
 
 @Module({})
@@ -15,6 +22,13 @@ export class N8nModule {
    * Register the N8n module synchronously
    */
   static forRoot(options: N8nModuleOptions): DynamicModule {
+    // Validate configuration synchronously (without connection test)
+    const syncOptions = { ...options, validateConnection: false }
+    validateN8nConfiguration(syncOptions).catch(error => {
+      console.error('N8N Configuration Error:', error.message)
+      throw error
+    })
+
     const controllers = options.enableSwaggerController ? [N8nController] : []
     
     return {
@@ -27,8 +41,22 @@ export class N8nModule {
           useValue: options,
         },
         N8nClientService,
+        WorkflowService,
+        ExecutionService,
+        CredentialService,
+        TagService,
+        WebhookService,
+        WebhookValidationGuard,
       ],
-      exports: [N8nClientService],
+      exports: [
+        N8nClientService,
+        WorkflowService,
+        ExecutionService,
+        CredentialService,
+        TagService,
+        WebhookService,
+        WebhookValidationGuard,
+      ],
       global: false,
     }
   }
@@ -43,8 +71,25 @@ export class N8nModule {
       module: N8nModule,
       imports: [...(options.imports || []), HttpModule],
       controllers,
-      providers: [...this.createAsyncProviders(options), N8nClientService],
-      exports: [N8nClientService],
+      providers: [
+        ...this.createAsyncProviders(options),
+        N8nClientService,
+        WorkflowService,
+        ExecutionService,
+        CredentialService,
+        TagService,
+        WebhookService,
+        WebhookValidationGuard,
+      ],
+      exports: [
+        N8nClientService,
+        WorkflowService,
+        ExecutionService,
+        CredentialService,
+        TagService,
+        WebhookService,
+        WebhookValidationGuard,
+      ],
       global: false,
     }
   }
@@ -67,14 +112,22 @@ export class N8nModule {
     if (options.useFactory) {
       return {
         provide: N8N_MODULE_OPTIONS,
-        useFactory: options.useFactory,
+        useFactory: async (...args: any[]) => {
+          const config = await options.useFactory!(...args)
+          await validateN8nConfiguration(config)
+          return config
+        },
         inject: options.inject || [],
       }
     }
 
     return {
       provide: N8N_MODULE_OPTIONS,
-      useFactory: async (optionsFactory: N8nOptionsFactory) => await optionsFactory.createN8nOptions(),
+      useFactory: async (optionsFactory: N8nOptionsFactory) => {
+        const config = await optionsFactory.createN8nOptions()
+        await validateN8nConfiguration(config)
+        return config
+      },
       inject: [options.useExisting || options.useClass!],
     }
   }

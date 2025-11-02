@@ -28,6 +28,12 @@ export interface N8nModuleOptions {
    * @default false
    */
   enableSwaggerController?: boolean
+
+  /**
+   * Validate connection to N8N during module initialization
+   * @default false
+   */
+  validateConnection?: boolean
 }
 
 export interface N8nOptionsFactory {

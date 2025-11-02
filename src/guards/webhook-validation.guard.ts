@@ -1,5 +1,5 @@
 import { Injectable, type CanActivate, type ExecutionContext } from "@nestjs/common"
-import type { Reflector } from "@nestjs/core"
+import { Reflector } from "@nestjs/core"
 import { N8N_WEBHOOK_METADATA, type N8nWebhookOptions } from "../decorators/n8n-webhook.decorator"
 
 @Injectable()

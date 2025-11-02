@@ -4,6 +4,7 @@ import { firstValueFrom } from "rxjs"
 import type { AxiosRequestConfig, AxiosResponse } from "axios"
 import type { N8nModuleOptions } from "../interfaces/n8n-module-options.interface"
 import { DEFAULT_TIMEOUT, N8N_MODULE_OPTIONS } from "../constants/n8n.constants"
+import { N8nConnectionError, N8nAuthenticationError } from "../errors/n8n.errors"
 import { WorkflowService } from "./workflow.service"
 import { ExecutionService } from "./execution.service"
 import { CredentialService } from "./credential.service"
@@ -141,18 +142,38 @@ export class N8nClientService {
   }
 
   /**
-   * Handle HTTP errors
+   * Handle HTTP errors with specific error types
    */
-  private handleError(error: any): void {
+  private handleError(error: any): never {
     if (error.response) {
       const status = error.response.status
-      const message = error.response.data?.message || error.message
-
-      console.error(`[N8N Client] HTTP ${status}: ${message}`)
+      const message = error.response.data?.message || error.response.statusText || error.message
+      
+      if (status === 401) {
+        throw new N8nAuthenticationError(this.apiKey)
+      }
+      
+      if (status === 404) {
+        throw new Error(`N8N API endpoint not found. Check your baseUrl: ${this.baseUrl}`)
+      }
+      
+      if (status === 403) {
+        throw new Error(`Access denied. Check your N8N API key permissions.`)
+      }
+      
+      if (status >= 500) {
+        throw new Error(`N8N server error (${status}): ${message}. Check your N8N instance health.`)
+      }
+      
+      throw new Error(`N8N API error (${status}): ${message}`)
     } else if (error.request) {
-      console.error("[N8N Client] No response received from n8n API")
+      throw new N8nConnectionError(this.baseUrl, new Error('No response received from N8N API. Check if N8N is running and accessible.'))
+    } else if (error.code === 'ECONNREFUSED') {
+      throw new N8nConnectionError(this.baseUrl, new Error('Connection refused. Is N8N running on the specified URL?'))
+    } else if (error.code === 'ENOTFOUND') {
+      throw new N8nConnectionError(this.baseUrl, new Error('Host not found. Check your baseUrl configuration.'))
     } else {
-      console.error(`[N8N Client] Error: ${error.message}`)
+      throw new Error(`N8N Client Error: ${error.message}`)
     }
   }
 }

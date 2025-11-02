@@ -28,6 +28,13 @@ export class ExecutionService {
   }
 
   /**
+   * Get executions for a specific workflow
+   */
+  async forWorkflow(workflowId: string, options?: Omit<ExecutionListOptions, 'workflowId'>): Promise<ExecutionListResponse> {
+    return this.list({ ...options, workflowId })
+  }
+
+  /**
    * Get a specific execution by ID
    */
   async get(id: string, includeData = false): Promise<Execution> {
