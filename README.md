@@ -97,7 +97,7 @@ When you enable `enableSwaggerController: true`, the package automatically adds 
 - `GET /rest/executions` - List executions
 - `GET /rest/credentials` - List credentials
 
-These endpoints are automatically documented in Swagger/OpenAPI.
+These endpoints are automatically documented in Swagger/OpenAPI with proper validation and error handling.
 
 ### 4. Use in Your Service
 
@@ -451,14 +451,33 @@ N8nModule.forRoot({
 })
 \`\`\`
 
+## Recent Improvements (v1.2.1+)
+
+### Enhanced Testing & Reliability
+- ✅ Fixed all Jest configuration conflicts
+- ✅ Comprehensive test suite with proper mocking
+- ✅ All services now properly tested through N8nClientService
+- ✅ Added input validation to all service methods
+
+### Better Error Handling
+- ✅ Services now validate required parameters (e.g., workflow ID, workflow name)
+- ✅ Consistent error messages across all methods
+- ✅ Proper TypeScript error types
+
+### Improved Configuration
+- ✅ Added `@nestjs/config` as a dependency for better configuration management
+- ✅ Enhanced module setup with proper async configuration support
+- ✅ Better Swagger controller integration
+
 ## Migration Guide
 
-### From v1.0.0 to v1.0.3+
+### From v1.0.0 to v1.2.1+
 
 - Replace `.all()` with `.list()`
 - Replace `.find()` with `.get()`
 - Add peer dependencies if missing
 - Update imports to use `@chimfwembe/nestjs-n8n`
+- Services now validate inputs - handle validation errors appropriately
 
 ## Contributing
 

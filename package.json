@@ -1,6 +1,6 @@
 {
   "name": "@chimfwembe/nestjs-n8n",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A fluent NestJS client for n8n automation workflows",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
