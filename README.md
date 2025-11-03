@@ -102,7 +102,7 @@ These endpoints are automatically documented in Swagger/OpenAPI.
 
 \`\`\`typescript
 import { Injectable } from '@nestjs/common';
-import { N8nClientService } from '@chimfwembe/nestjs-n8n';
+import { N8nClientService, createN8nConfig } from '@chimfwembe/nestjs-n8n';
 
 @Injectable()
 export class WorkflowService {
@@ -409,6 +409,18 @@ describe('WorkflowService', () => {
 This should no longer happen as dependencies are auto-installed. If you still see this error, make sure you have the basic NestJS dependencies:
 \`\`\`bash
 npm install @nestjs/common @nestjs/core reflect-metadata rxjs
+\`\`\`
+
+#### "baseUrl vs baseURL" Error
+Use the helper function to avoid typos:
+\`\`\`typescript
+import { createN8nConfig } from '@chimfwembe/nestjs-n8n';
+
+// This provides TypeScript autocompletion and validation
+const config = createN8nConfig({
+  baseUrl: 'https://your-n8n.com', // ✅ Correct
+  apiKey: 'your-api-key',
+});
 \`\`\`
 
 #### Configuration Errors

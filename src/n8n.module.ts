@@ -8,11 +8,6 @@ import type {
 import { N8N_MODULE_OPTIONS } from "./constants/n8n.constants"
 import { validateN8nConfiguration } from "./utils/config-validator"
 import { N8nClientService } from "./services/n8n-client.service"
-import { WorkflowService } from "./services/workflow.service"
-import { ExecutionService } from "./services/execution.service"
-import { CredentialService } from "./services/credential.service"
-import { TagService } from "./services/tag.service"
-import { WebhookService } from "./services/webhook.service"
 import { WebhookValidationGuard } from "./guards/webhook-validation.guard"
 import { N8nController } from "./controllers/n8n.controller"
 
@@ -41,20 +36,10 @@ export class N8nModule {
           useValue: options,
         },
         N8nClientService,
-        WorkflowService,
-        ExecutionService,
-        CredentialService,
-        TagService,
-        WebhookService,
         WebhookValidationGuard,
       ],
       exports: [
         N8nClientService,
-        WorkflowService,
-        ExecutionService,
-        CredentialService,
-        TagService,
-        WebhookService,
         WebhookValidationGuard,
       ],
       global: false,
@@ -74,20 +59,10 @@ export class N8nModule {
       providers: [
         ...this.createAsyncProviders(options),
         N8nClientService,
-        WorkflowService,
-        ExecutionService,
-        CredentialService,
-        TagService,
-        WebhookService,
         WebhookValidationGuard,
       ],
       exports: [
         N8nClientService,
-        WorkflowService,
-        ExecutionService,
-        CredentialService,
-        TagService,
-        WebhookService,
         WebhookValidationGuard,
       ],
       global: false,

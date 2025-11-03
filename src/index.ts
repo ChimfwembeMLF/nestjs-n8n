@@ -29,13 +29,8 @@ export {
   TagListResponse
 } from "./interfaces/tag.interface"
 
-// Services
+// Services  
 export * from "./services/n8n-client.service"
-export * from "./services/workflow.service"
-export * from "./services/execution.service"
-export * from "./services/credential.service"
-export * from "./services/tag.service"
-export * from "./services/webhook.service"
 
 // Decorators
 export * from "./decorators/n8n-webhook.decorator"
@@ -57,3 +52,4 @@ export * from "./errors/n8n.errors"
 
 // Utilities
 export * from "./utils/config-validator"
+export * from "./utils/config-helpers"
