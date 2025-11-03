@@ -33,6 +33,9 @@ export class WorkflowService {
    * Get a specific workflow by ID
    */
   async get(id: string): Promise<Workflow> {
+    if (!id || id.trim() === '') {
+      throw new Error('Workflow ID is required')
+    }
     return this.client.get<Workflow>(`/api/v1/workflows/${id}`)
   }
 
@@ -48,6 +51,9 @@ export class WorkflowService {
    * Create a new workflow
    */
   async create(data: CreateWorkflowDto): Promise<Workflow> {
+    if (!data || !data.name || data.name.trim() === '') {
+      throw new Error('Workflow name is required')
+    }
     return this.client.post<Workflow>("/api/v1/workflows", data)
   }
 
@@ -55,6 +61,9 @@ export class WorkflowService {
    * Update an existing workflow
    */
   async update(id: string, data: UpdateWorkflowDto): Promise<Workflow> {
+    if (!id || id.trim() === '') {
+      throw new Error('Workflow ID is required')
+    }
     return this.client.patch<Workflow>(`/api/v1/workflows/${id}`, data)
   }
 
@@ -62,6 +71,9 @@ export class WorkflowService {
    * Delete a workflow
    */
   async delete(id: string): Promise<void> {
+    if (!id || id.trim() === '') {
+      throw new Error('Workflow ID is required')
+    }
     return this.client.delete(`/api/v1/workflows/${id}`)
   }
 
@@ -69,6 +81,9 @@ export class WorkflowService {
    * Activate a workflow
    */
   async activate(id: string): Promise<Workflow> {
+    if (!id || id.trim() === '') {
+      throw new Error('Workflow ID is required')
+    }
     return this.client.patch<Workflow>(`/api/v1/workflows/${id}`, { active: true })
   }
 
@@ -76,6 +91,9 @@ export class WorkflowService {
    * Deactivate a workflow
    */
   async deactivate(id: string): Promise<Workflow> {
+    if (!id || id.trim() === '') {
+      throw new Error('Workflow ID is required')
+    }
     return this.client.patch<Workflow>(`/api/v1/workflows/${id}`, { active: false })
   }
 
